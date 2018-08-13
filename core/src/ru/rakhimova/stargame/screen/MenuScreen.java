@@ -20,8 +20,12 @@ public class MenuScreen extends Base2DScreen {
     Vector2 pos;
     Vector2 v;
     Vector2 v1;
+    Vector2 v2;
 
     Vector2 touchPos;
+
+    float lengthV1;
+    float step;
 
     public MenuScreen(Game game) {
         super(game);
@@ -35,7 +39,9 @@ public class MenuScreen extends Base2DScreen {
         pos = new Vector2(0, 0);
         v = new Vector2();
         touchPos = new Vector2();
-        v1 = new Vector2();
+        v1 = new Vector2(0,0);
+        v2 = v1.cpy();
+        step = 50;
     }
 
     @Override
@@ -44,9 +50,9 @@ public class MenuScreen extends Base2DScreen {
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        while(pos.x <= touchPos.x && pos.y <= touchPos.y) {
-            batch.draw(img, pos.x, pos.y);
-        }
+        //if(pos.len2() != lengthV1) {
+            batch.draw(img, v2.x, v2.y);
+       // }
         batch.end();
         pos.add(v1);
     }
@@ -59,18 +65,38 @@ public class MenuScreen extends Base2DScreen {
     }
 
     @Override
+    public boolean keyDown(int keycode) {
+      switch (keycode){
+          case (19):
+              v2.add(0,step);
+              break;
+          case (20):
+              v2.add(0,-step);
+              break;
+          case (21):
+              v2.add(-step,0);break;
+          case (22):
+              v2.add(step,0);
+              break;
+      }
+
+        return super.keyDown(keycode);
+    }
+
+    @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        super.touchDown(screenX, screenY, pointer, button);
+        screenY = Gdx.graphics.getHeight() - screenY;
+        System.out.println("touchDown screenX = " + screenX + " screenY = " + screenY);
         touchPos.set(screenX, Gdx.graphics.getHeight() - screenY);
         v1 = touchPos.sub(v);
-        v1.nor();
-        System.out.println("touchPos.x = " + touchPos.x + " touchPos.y = " + touchPos.y);
+        lengthV1 = v1.len2();
+        v1.scl(0.05f);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        super.touchUp(screenX, screenY, pointer, button);
+       // super.touchUp(screenX, screenY, pointer, button);
         return false;
     }
 }
