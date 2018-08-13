@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-
 import ru.rakhimova.stargame.base.Base2DScreen;
 
 /**
@@ -43,9 +42,9 @@ public class MenuScreen extends Base2DScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
         batch.draw(img, position.x, position.y);
-          if((position.x < x) && (position.y < y)) {
-              position.add(v);
-         }
+        if ((position.x < x) && (position.y < y)) {
+            position.add(v);
+        }
         batch.end();
 
     }
