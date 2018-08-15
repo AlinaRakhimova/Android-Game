@@ -13,13 +13,13 @@ import ru.rakhimova.stargame.base.Base2DScreen;
  */
 
 public class MenuScreen extends Base2DScreen {
+    private static final float SPEED = 1f;
     private SpriteBatch batch;
     private Texture img;
     private Vector2 position;
     private Vector2 v;
     private Vector2 touchPos;
-    private int x;
-    private int y;
+    private Vector2 buf;
 
     public MenuScreen(Game game) {
         super(game);
@@ -33,6 +33,7 @@ public class MenuScreen extends Base2DScreen {
         position = new Vector2(0, 0);
         touchPos = new Vector2();
         v = new Vector2(0, 0);
+        buf = new Vector2();
     }
 
     @Override
@@ -40,11 +41,12 @@ public class MenuScreen extends Base2DScreen {
         super.render(delta);
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        batch.begin();
-        batch.draw(img, position.x, position.y);
-        if ((position.x < x) && (position.y < y)) {
+        buf.set(touchPos);
+        if (buf.sub(position).len() > SPEED) {
             position.add(v);
         }
+        batch.begin();
+        batch.draw(img, position.x, position.y);
         batch.end();
 
     }
@@ -79,11 +81,9 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         screenY = Gdx.graphics.getHeight() - screenY;
-        y = screenY;
-        x = screenX;
         touchPos.set(screenX, screenY);
-        v = touchPos.sub(position);
-        v.scl(0.005f);
+        v.set(touchPos.cpy().sub(position).setLength(SPEED));
+       // v.scl(0.005f);
         return false;
     }
 
