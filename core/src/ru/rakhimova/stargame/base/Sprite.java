@@ -1,5 +1,4 @@
 package ru.rakhimova.stargame.base;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -31,6 +30,12 @@ public class Sprite extends Rect {
                 scale, scale, // масштаб по оси x и y
                 angle // угол вращения
         );
+    }
+
+    public void setHeightProportion(float height) {
+        setHeight(height);
+        float aspect = regions[frame].getRegionWidth() / (float) regions[frame].getRegionHeight();
+        setWidth(height * aspect);
     }
 
     public void resize(Rect worldBounds) {
@@ -66,4 +71,3 @@ public class Sprite extends Rect {
         this.scale = scale;
     }
 }
-
