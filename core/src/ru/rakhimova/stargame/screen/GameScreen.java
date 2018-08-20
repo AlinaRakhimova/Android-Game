@@ -133,8 +133,14 @@ public class GameScreen extends Base2DScreen {
             case (Input.Keys.RIGHT):
                 mainShip.changePosition(0);
                 break;
+            case (Input.Keys.A):
+                mainShip.changePosition(0);
+                break;
+            case (Input.Keys.D):
+                mainShip.changePosition(0);
+                break;
         }
-        
+
         return false;
     }
 }
