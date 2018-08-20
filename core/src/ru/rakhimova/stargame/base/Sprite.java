@@ -21,6 +21,9 @@ public class Sprite extends Rect {
         regions[0] = region;
     }
 
+    public Sprite() {
+    }
+
     public void draw(SpriteBatch batch) {
         batch.draw(
                 regions[frame], // текущий регион
