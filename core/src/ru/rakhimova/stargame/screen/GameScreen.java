@@ -126,7 +126,15 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     public boolean keyUp(int keycode) {
-        mainShip.changePosition(0);
+        switch (keycode) {
+            case (Input.Keys.LEFT):
+                mainShip.changePosition(0);
+                break;
+            case (Input.Keys.RIGHT):
+                mainShip.changePosition(0);
+                break;
+        }
+        
         return false;
     }
 }
