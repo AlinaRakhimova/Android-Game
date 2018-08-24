@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import ru.rakhimova.stargame.base.ActionListener;
 import ru.rakhimova.stargame.base.Base2DScreen;
 import ru.rakhimova.stargame.math.Rect;
-import ru.rakhimova.stargame.screen.menu.ButtomNewGame;
-import ru.rakhimova.stargame.screen.menu.ButtonExit;
+import ru.rakhimova.stargame.screen.menuscreen.ButtomNewGame;
+import ru.rakhimova.stargame.screen.menuscreen.ButtonExit;
 import ru.rakhimova.stargame.screen.sprites.Background;
 import ru.rakhimova.stargame.screen.sprites.Star;
 

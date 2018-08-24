@@ -2,28 +2,33 @@ package ru.rakhimova.stargame.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.rakhimova.stargame.base.Base2DScreen;
 import ru.rakhimova.stargame.math.Rect;
+import ru.rakhimova.stargame.screen.gamescreen.MainShip;
+import ru.rakhimova.stargame.screen.pool.BulletPool;
 import ru.rakhimova.stargame.screen.sprites.Background;
-import ru.rakhimova.stargame.screen.sprites.MainShip;
 import ru.rakhimova.stargame.screen.sprites.Star;
 
 
 public class GameScreen extends Base2DScreen {
 
-    private static final int STAR_COUNT = 20;
+    private static final int STAR_COUNT = 56;
+
     private Background background;
     private Texture bgTexture;
-    private TextureAtlas menuAtlas;
+    private TextureAtlas atlas;
+
     private Star star[];
     private MainShip mainShip;
-    private TextureAtlas mainAtlas;
+
+    private BulletPool bulletPool = new BulletPool();
+
 
     public GameScreen(Game game) {
         super(game);
@@ -34,14 +39,12 @@ public class GameScreen extends Base2DScreen {
         super.show();
         bgTexture = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bgTexture));
-        menuAtlas = new TextureAtlas("textures/menuAtlas.tpack");
+        atlas = new TextureAtlas("textures/mainAtlas.tpack");
         star = new Star[STAR_COUNT];
         for (int i = 0; i < star.length; i++) {
-            star[i] = new Star(menuAtlas);
+            star[i] = new Star(atlas);
         }
-        background = new Background(new TextureRegion(bgTexture));
-        mainAtlas = new TextureAtlas("textures/mainAtlas.tpack");
-        mainShip = new MainShip(mainAtlas);
+        mainShip = new MainShip(atlas, bulletPool);
     }
 
     @Override
@@ -62,6 +65,7 @@ public class GameScreen extends Base2DScreen {
             star[i].draw(batch);
         }
         mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
         batch.end();
     }
 
@@ -70,6 +74,7 @@ public class GameScreen extends Base2DScreen {
             star[i].update(delta);
         }
         mainShip.update(delta);
+        bulletPool.updateActiveSprites(delta);
     }
 
     public void checkCollisions() {
@@ -77,7 +82,7 @@ public class GameScreen extends Base2DScreen {
     }
 
     public void deleteAllDestroyed() {
-
+        bulletPool.freeAllDestroyedActiveSprites();
     }
 
     @Override
@@ -94,54 +99,31 @@ public class GameScreen extends Base2DScreen {
     public void dispose() {
         super.dispose();
         bgTexture.dispose();
-        menuAtlas.dispose();
-        mainAtlas.dispose();
+        atlas.dispose();
+        bulletPool.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode) {
-            case (Input.Keys.LEFT):
-                mainShip.changePosition(-1);
-                break;
-            case (Input.Keys.RIGHT):
-                mainShip.changePosition(1);
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        switch (character) {
-            case ('a'):
-                mainShip.changePosition(-1);
-                break;
-            case ('d'):
-                mainShip.changePosition(1);
-                break;
-        }
-        return false;
+        mainShip.keyDown(keycode);
+        return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case (Input.Keys.LEFT):
-                mainShip.changePosition(0);
-                break;
-            case (Input.Keys.RIGHT):
-                mainShip.changePosition(0);
-                break;
-            case (Input.Keys.A):
-                mainShip.changePosition(0);
-                break;
-            case (Input.Keys.D):
-                mainShip.changePosition(0);
-                break;
-        }
+        mainShip.keyUp(keycode);
+        return super.keyUp(keycode);
+    }
 
-        return false;
+    @Override
+    public boolean touchDown(Vector2 touch, int pointer) {
+        mainShip.touchDown(touch, pointer);
+        return super.touchDown(touch, pointer);
+    }
+
+    @Override
+    public boolean touchUp(Vector2 touch, int pointer) {
+        mainShip.touchUp(touch, pointer);
+        return super.touchUp(touch, pointer);
     }
 }
-

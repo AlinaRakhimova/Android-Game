@@ -3,8 +3,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.math.Rect;
-import ru.geekbrains.stargame.utils.Regions;
+import ru.rakhimova.stargame.math.Rect;
+import ru.rakhimova.stargame.utils.Regions;
 
 
 public class Sprite extends Rect {

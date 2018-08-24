@@ -1,4 +1,4 @@
-package ru.geekbrains.stargame.base;
+package ru.rakhimova.stargame.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

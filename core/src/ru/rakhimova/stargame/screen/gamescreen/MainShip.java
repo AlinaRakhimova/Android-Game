@@ -1,12 +1,12 @@
-package ru.rakhimova.stargame.screen.sprites;
+package ru.rakhimova.stargame.screen.gamescreen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.base.Sprite;
-import ru.geekbrains.stargame.math.Rect;
-import ru.geekbrains.stargame.screen.pool.BulletPool;
+import ru.rakhimova.stargame.base.Sprite;
+import ru.rakhimova.stargame.math.Rect;
+import ru.rakhimova.stargame.screen.pool.BulletPool;
 
 
 public class MainShip extends Ship {

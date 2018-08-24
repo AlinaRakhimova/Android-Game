@@ -1,10 +1,10 @@
-package ru.geekbrains.stargame.screen.gamescreen;
+package ru.rakhimova.stargame.screen.gamescreen;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.base.Sprite;
-import ru.geekbrains.stargame.math.Rect;
+import ru.rakhimova.stargame.base.Sprite;
+import ru.rakhimova.stargame.math.Rect;
 
 
 public class Bullet extends Sprite {
