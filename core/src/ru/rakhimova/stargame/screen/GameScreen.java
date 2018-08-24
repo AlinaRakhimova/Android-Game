@@ -2,6 +2,7 @@ package ru.rakhimova.stargame.screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -28,6 +29,7 @@ public class GameScreen extends Base2DScreen {
     private MainShip mainShip;
 
     private BulletPool bulletPool = new BulletPool();
+    private Music music;
 
 
     public GameScreen(Game game) {
@@ -37,6 +39,9 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
+        music = Gdx.audio.newMusic(Gdx.files.internal("music/backgroundMusic.mp3"));
+        music.play();
+        music.setLooping(true);
         bgTexture = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bgTexture));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
@@ -101,6 +106,7 @@ public class GameScreen extends Base2DScreen {
         bgTexture.dispose();
         atlas.dispose();
         bulletPool.dispose();
+        music.stop();
     }
 
     @Override

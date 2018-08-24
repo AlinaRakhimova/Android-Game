@@ -1,5 +1,7 @@
 package ru.rakhimova.stargame.screen.gamescreen;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -31,5 +33,7 @@ public class Ship extends Sprite {
     protected void shoot() {
         Bullet bullet = bulletPool.obtain();
         bullet.set(this, bulletRegion, pos, bulletV, bulletHeight, worldBounds, bulletDamage);
+        Sound sound = Gdx.audio.newSound(Gdx.files.internal("music/shootSound2.wav"));
+        sound.play(0.2f);
     }
 }
