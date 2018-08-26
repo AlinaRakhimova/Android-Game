@@ -21,7 +21,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     protected Game game;
     private Rect screenBounds; // границы области рисования в пикселях
-    private Rect worldBounds; // границы проекции мировых координат
+    protected Rect worldBounds; // границы проекции мировых координат
     private Rect glBounds; // дефолтные границы проекции мир - gl
 
     private Matrix4 worldToGl;
@@ -55,7 +55,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-      //  System.out.println("resize w = " + width + " h = " + height);
+        System.out.println("resize w = " + width + " h = " + height);
         screenBounds.setSize(width, height);
         screenBounds.setLeft(0);
         screenBounds.setBottom(0);
@@ -85,63 +85,63 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     @Override
     public void hide() {
-    //    System.out.println("hide");
+        System.out.println("hide");
         dispose();
     }
 
     @Override
     public void dispose() {
-    //    System.out.println("dispose");
+        System.out.println("dispose");
         batch.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-      //  System.out.println("keyDown keycode = " + keycode);
+        System.out.println("keyDown keycode = " + keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-    //    System.out.println("keyUp keycode = " + keycode);
+        System.out.println("keyUp keycode = " + keycode);
         return false;
     }
 
     @Override
     public boolean keyTyped(char character) {
-    //    System.out.println("keyTyped character = " + character);
+        System.out.println("keyTyped character = " + character);
         return false;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-     //   System.out.println("touchDown screenX = " + screenX + " screenY = " + screenY);
+        System.out.println("touchDown screenX = " + screenX + " screenY = " + screenY);
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchDown(touch, pointer);
         return false;
     }
 
     public boolean touchDown(Vector2 touch, int pointer) {
-     //   System.out.println("touchDown touchX = " + touch.x + " touchY = " + touch.y);
+        System.out.println("touchDown touchX = " + touch.x + " touchY = " + touch.y);
         return false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-     //   System.out.println("touchUp screenX = " + screenX + " screenY = " + screenY);
+        System.out.println("touchUp screenX = " + screenX + " screenY = " + screenY);
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchUp(touch, pointer);
         return false;
     }
 
     public boolean touchUp(Vector2 touch, int pointer) {
-    //    System.out.println("touchUp touchX = " + touch.x + " touchY = " + touch.y);
+        System.out.println("touchUp touchX = " + touch.x + " touchY = " + touch.y);
         return false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-     //   System.out.println("touchDragged screenX = " + screenX + " screenY = " + screenY);
+        System.out.println("touchDragged screenX = " + screenX + " screenY = " + screenY);
         touch.set(screenX, screenBounds.getHeight() - screenY).mul(screenToWorld);
         touchDragged(touch, pointer);
         return false;
