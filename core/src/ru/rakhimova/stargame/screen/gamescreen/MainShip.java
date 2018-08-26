@@ -19,8 +19,6 @@ public class MainShip extends Ship {
     private boolean pressedLeft;
     private boolean pressedRight;
 
-
-
     public MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"), 1, 2,2);
         setHeightProportion(SHIP_HEIGHT);
