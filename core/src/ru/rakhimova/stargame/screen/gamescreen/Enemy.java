@@ -1,12 +1,12 @@
-package ru.geekbrains.stargame.screen.gamescreen;
+package ru.rakhimova.stargame.screen.gamescreen;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.stargame.math.Rect;
-import ru.geekbrains.stargame.screen.pool.BulletPool;
-import ru.geekbrains.stargame.screen.pool.ExplosionPool;
+import ru.rakhimova.stargame.math.Rect;
+import ru.rakhimova.stargame.screen.pool.BulletPool;
+import ru.rakhimova.stargame.screen.pool.ExplosionPool;
 
 public class Enemy extends Ship {
 
