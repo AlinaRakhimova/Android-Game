@@ -6,7 +6,6 @@ import com.badlogic.gdx.math.Vector2;
 import ru.rakhimova.stargame.math.Rect;
 import ru.rakhimova.stargame.utils.Regions;
 
-
 public class Sprite extends Rect {
 
     protected float angle;
@@ -31,14 +30,16 @@ public class Sprite extends Rect {
     }
 
     public void draw(SpriteBatch batch) {
-        batch.draw(
-                regions[frame], // текущий регион
-                getLeft(), getBottom(), // точка отрисовки
-                halfWidth, halfHeight, // точка вращения
-                getWidth(), getHeight(), // ширина и высота
-                scale, scale, // масштаб по оси x и y
-                angle // угол вращения
-        );
+        if (!this.isDestroyed) {
+            batch.draw(
+                    regions[frame], // текущий регион
+                    getLeft(), getBottom(), // точка отрисовки
+                    halfWidth, halfHeight, // точка вращения
+                    getWidth(), getHeight(), // ширина и высота
+                    scale, scale, // масштаб по оси x и y
+                    angle // угол вращения
+            );
+        }
     }
 
     public void setHeightProportion(float height) {
