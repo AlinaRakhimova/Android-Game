@@ -11,6 +11,9 @@ import ru.rakhimova.stargame.screen.pool.ExplosionPool;
 
 public class Ship extends Sprite {
 
+    private static final float DAMAGE_ANIMATE_INTERVAL = 0.1f;
+    private float damageAnimateTimer = DAMAGE_ANIMATE_INTERVAL;
+
     protected Vector2 v = new Vector2();
     protected Rect worldBounds;
 
@@ -36,9 +39,19 @@ public class Ship extends Sprite {
         this.worldBounds = worldBounds;
     }
 
-    public Ship(TextureRegion region, int rows, int cols, int frames, Sound sound) {
+    public Ship(TextureRegion region, int rows, int cols, int frames, Sound sound, ExplosionPool explosionPool) {
         super(region, rows, cols, frames);
         this.sound = sound;
+        this.explosionPool = explosionPool;
+    }
+
+    @Override
+    public void update(float delta) {
+        super.update(delta);
+        damageAnimateTimer += delta;
+        if (damageAnimateTimer >= DAMAGE_ANIMATE_INTERVAL) {
+            frame = 0;
+        }
     }
 
     @Override
@@ -55,5 +68,20 @@ public class Ship extends Sprite {
     public void boom() {
         Explosion explosion = explosionPool.obtain();
         explosion.set(getHeight(), pos);
+    }
+
+    public void damage(int damage) {
+        frame = 1;
+        damageAnimateTimer = 0f;
+        hp -= damage;
+        if (hp <= 0) {
+            destroy();
+        }
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        boom();
     }
 }
