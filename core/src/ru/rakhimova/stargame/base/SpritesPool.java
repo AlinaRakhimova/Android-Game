@@ -1,7 +1,6 @@
 package ru.rakhimova.stargame.base;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,6 +63,11 @@ public abstract class SpritesPool<T extends Sprite> {
             freeObjects.add(object);
             debugLog();
         }
+    }
+
+    public void freeAllActiveObjects() {
+        freeObjects.addAll(activeObjects);
+        activeObjects.clear();
     }
 
     public List<T> getActiveObjects() {
