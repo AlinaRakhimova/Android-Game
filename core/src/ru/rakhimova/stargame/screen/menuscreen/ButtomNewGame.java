@@ -8,8 +8,8 @@ import ru.rakhimova.stargame.math.Rect;
 
 public class ButtomNewGame extends ScaledTouchUpButton {
 
-    public ButtomNewGame(TextureAtlas atlas, ActionListener actionListener, float pressScale) {
-        super(atlas.findRegion("btPlay"), actionListener, pressScale);
+    public ButtomNewGame(TextureAtlas atlas, ActionListener actionListener, float pressScale, String nameRegion) {
+        super(atlas.findRegion(nameRegion), actionListener, pressScale);
     }
 
     @Override

@@ -12,12 +12,14 @@ import com.badlogic.gdx.math.Vector2;
 
 import java.util.List;
 
+import ru.rakhimova.stargame.base.ActionListener;
 import ru.rakhimova.stargame.base.Base2DScreen;
 import ru.rakhimova.stargame.math.Rect;
 import ru.rakhimova.stargame.screen.gamescreen.Bullet;
 import ru.rakhimova.stargame.screen.gamescreen.Enemy;
 import ru.rakhimova.stargame.screen.gamescreen.MainShip;
 import ru.rakhimova.stargame.screen.gamescreen.MessageGameOver;
+import ru.rakhimova.stargame.screen.menuscreen.ButtomNewGame;
 import ru.rakhimova.stargame.screen.pool.BulletPool;
 import ru.rakhimova.stargame.screen.pool.EnemyPool;
 import ru.rakhimova.stargame.screen.pool.ExplosionPool;
@@ -25,15 +27,19 @@ import ru.rakhimova.stargame.screen.sprites.Background;
 import ru.rakhimova.stargame.screen.sprites.Star;
 import ru.rakhimova.stargame.utils.EnemyEmitter;
 
-public class GameScreen extends Base2DScreen {
+public class GameScreen extends Base2DScreen implements ActionListener {
 
     private enum State {PLAYING, GAME_OVER}
 
     private static final int STAR_COUNT = 56;
+    private static final float BUTTON_PRESS_SCALE = 0.9f;
+    private static final float BUTTON_HEIGHT = 0.05f;
 
     private Background background;
     private Texture bgTexture;
     private TextureAtlas atlas;
+    private TextureAtlas atlasMenu;
+    private ButtomNewGame buttomNewGame;
 
     private Star star[];
     private MainShip mainShip;
@@ -80,6 +86,9 @@ public class GameScreen extends Base2DScreen {
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, mainShip, bulletSound);
         enemyEmitter = new EnemyEmitter(atlas, worldBounds, enemyPool);
         messageGameOver = new MessageGameOver(atlas);
+        String nameRegion = "button_new_game";
+        buttomNewGame = new ButtomNewGame(atlas, this, BUTTON_PRESS_SCALE, nameRegion);
+        buttomNewGame.setHeightProportion(BUTTON_HEIGHT);
         startNewGame();
     }
 
@@ -106,6 +115,8 @@ public class GameScreen extends Base2DScreen {
         enemyPool.drawActiveSprites(batch);
         if (state == State.GAME_OVER) {
             messageGameOver.draw(batch);
+            buttomNewGame.setBottom(messageGameOver.getBottom() - messageGameOver.getHeight()*2);
+            buttomNewGame.draw(batch);
         }
         batch.end();
     }
@@ -222,12 +233,14 @@ public class GameScreen extends Base2DScreen {
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         mainShip.touchDown(touch, pointer);
+        buttomNewGame.touchDown(touch, pointer);
         return super.touchDown(touch, pointer);
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
         mainShip.touchUp(touch, pointer);
+        buttomNewGame.touchUp(touch, pointer);
         return super.touchUp(touch, pointer);
     }
 
@@ -242,4 +255,12 @@ public class GameScreen extends Base2DScreen {
         enemyPool.freeAllActiveObjects();
         explosionPool.freeAllActiveObjects();
     }
+
+    @Override
+    public void actionPerformed(Object src) {
+        if (src == buttomNewGame) {
+            game.setScreen(new GameScreen(game));
+        }
+    }
+
 }

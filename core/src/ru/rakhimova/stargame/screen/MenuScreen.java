@@ -50,7 +50,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         }
         buttonExit = new ButtonExit(atlas, this, BUTTON_PRESS_SCALE);
         buttonExit.setHeightProportion(BUTTON_HEIGHT);
-        buttomNewGame = new ButtomNewGame(atlas, this, BUTTON_PRESS_SCALE);
+        String nameRegion = "btPlay";
+        buttomNewGame = new ButtomNewGame(atlas, this, BUTTON_PRESS_SCALE, nameRegion);
         buttomNewGame.setHeightProportion(BUTTON_HEIGHT);
     }
 
