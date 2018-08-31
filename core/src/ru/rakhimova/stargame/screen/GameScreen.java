@@ -38,7 +38,6 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private Background background;
     private Texture bgTexture;
     private TextureAtlas atlas;
-    private TextureAtlas atlasMenu;
     private ButtomNewGame buttomNewGame;
 
     private Star star[];
