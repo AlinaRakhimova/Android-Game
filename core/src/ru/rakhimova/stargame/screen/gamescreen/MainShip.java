@@ -37,7 +37,7 @@ public class MainShip extends Ship {
         this.bulletV.set(0, 0.5f);
         this.bulletDamage = 100;
         this.reloadInterval = 0.4f;
-        this.hp = 1;
+        this.hp = 100;
         flushDestroy();
     }
 
@@ -77,9 +77,6 @@ public class MainShip extends Ship {
             case Input.Keys.RIGHT:
                 pressedRight = true;
                 moveRight();
-                break;
-            case Input.Keys.UP:
-                shoot();
                 break;
         }
     }
