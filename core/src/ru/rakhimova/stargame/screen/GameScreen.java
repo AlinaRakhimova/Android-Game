@@ -9,17 +9,20 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
 
 import java.util.List;
 
 import ru.rakhimova.stargame.base.ActionListener;
 import ru.rakhimova.stargame.base.Base2DScreen;
+import ru.rakhimova.stargame.base.Font;
 import ru.rakhimova.stargame.math.Rect;
 import ru.rakhimova.stargame.screen.gamescreen.Bullet;
+import ru.rakhimova.stargame.screen.gamescreen.ButtonNewGame;
 import ru.rakhimova.stargame.screen.gamescreen.Enemy;
 import ru.rakhimova.stargame.screen.gamescreen.MainShip;
 import ru.rakhimova.stargame.screen.gamescreen.MessageGameOver;
-import ru.rakhimova.stargame.screen.menuscreen.ButtomNewGame;
+import ru.rakhimova.stargame.screen.gamescreen.TrackingStar;
 import ru.rakhimova.stargame.screen.pool.BulletPool;
 import ru.rakhimova.stargame.screen.pool.EnemyPool;
 import ru.rakhimova.stargame.screen.pool.ExplosionPool;
@@ -32,15 +35,17 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private enum State {PLAYING, GAME_OVER}
 
     private static final int STAR_COUNT = 56;
-    private static final float BUTTON_PRESS_SCALE = 0.9f;
-    private static final float BUTTON_HEIGHT = 0.05f;
+    private static final float FONT_SIZE = 0.03f;
+
+    private static final String FRAGS = "Frags: ";
+    private static final String HP = "HP: ";
+    private static final String LEVEL = "Level: ";
 
     private Background background;
     private Texture bgTexture;
     private TextureAtlas atlas;
-    private ButtomNewGame buttomNewGame;
 
-    private Star star[];
+    private TrackingStar star[];
     private MainShip mainShip;
 
     private BulletPool bulletPool = new BulletPool();
@@ -57,6 +62,12 @@ public class GameScreen extends Base2DScreen implements ActionListener {
     private State state;
 
     private MessageGameOver messageGameOver;
+    private ButtonNewGame buttonNewGame;
+
+    private Font font;
+    private StringBuilder sbFrags = new StringBuilder();
+    private StringBuilder sbHP = new StringBuilder();
+    private StringBuilder sbLevel = new StringBuilder();
 
     int frags;
 
@@ -73,10 +84,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         bgTexture = new Texture("textures/bg.png");
         background = new Background(new TextureRegion(bgTexture));
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
-        star = new Star[STAR_COUNT];
-        for (int i = 0; i < star.length; i++) {
-            star[i] = new Star(atlas);
-        }
+        star = new TrackingStar[STAR_COUNT];
         bulletSound = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
         laserSound = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
         explosionSound = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
@@ -85,9 +93,12 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         enemyPool = new EnemyPool(bulletPool, explosionPool, worldBounds, mainShip, bulletSound);
         enemyEmitter = new EnemyEmitter(atlas, worldBounds, enemyPool);
         messageGameOver = new MessageGameOver(atlas);
-        String nameRegion = "button_new_game";
-        buttomNewGame = new ButtomNewGame(atlas, this, BUTTON_PRESS_SCALE, nameRegion);
-        buttomNewGame.setHeightProportion(BUTTON_HEIGHT);
+        buttonNewGame = new ButtonNewGame(atlas, this);
+        for (int i = 0; i < star.length; i++) {
+            star[i] = new TrackingStar(atlas, mainShip.getV());
+        }
+        font = new Font("font/font.fnt", "font/font.png");
+        font.setWorldSize(FONT_SIZE);
         startNewGame();
     }
 
@@ -114,10 +125,19 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         enemyPool.drawActiveSprites(batch);
         if (state == State.GAME_OVER) {
             messageGameOver.draw(batch);
-            buttomNewGame.setBottom(messageGameOver.getBottom() - messageGameOver.getHeight()*2);
-            buttomNewGame.draw(batch);
+            buttonNewGame.draw(batch);
         }
+        printInfo();
         batch.end();
+    }
+
+    public void printInfo() {
+        sbFrags.setLength(0);
+        sbHP.setLength(0);
+        sbLevel.setLength(0);
+        font.draw(batch, sbFrags.append(FRAGS).append(frags), worldBounds.getLeft(), worldBounds.getTop());
+        font.draw(batch, sbHP.append(HP).append(mainShip.getHp()), worldBounds.pos.x, worldBounds.getTop(), Align.center);
+        font.draw(batch, sbLevel.append(LEVEL).append(enemyEmitter.getLevel()), worldBounds.getRight(), worldBounds.getTop(),  Align.right);
     }
 
     public void update(float delta) {
@@ -133,7 +153,7 @@ public class GameScreen extends Base2DScreen implements ActionListener {
                 mainShip.update(delta);
                 bulletPool.updateActiveSprites(delta);
                 enemyPool.updateActiveSprites(delta);
-                enemyEmitter.generateEnemies(delta);
+                enemyEmitter.generateEnemies(delta, frags);
                 break;
             case GAME_OVER:
                 break;
@@ -215,41 +235,50 @@ public class GameScreen extends Base2DScreen implements ActionListener {
         enemyPool.dispose();
         bulletSound.dispose();
         music.dispose();
+        font.dispose();
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        mainShip.keyDown(keycode);
+        if (state == State.PLAYING) {
+            mainShip.keyDown(keycode);
+        }
         return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        mainShip.keyUp(keycode);
+        if (state == State.PLAYING) {
+            mainShip.keyUp(keycode);
+        }
         return super.keyUp(keycode);
     }
 
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
-        mainShip.touchDown(touch, pointer);
-        buttomNewGame.touchDown(touch, pointer);
+        if (state == State.PLAYING) {
+            mainShip.touchDown(touch, pointer);
+        } else {
+            buttonNewGame.touchDown(touch, pointer);
+        }
         return super.touchDown(touch, pointer);
     }
 
     @Override
     public boolean touchUp(Vector2 touch, int pointer) {
-        mainShip.touchUp(touch, pointer);
-        buttomNewGame.touchUp(touch, pointer);
+        if (state == State.PLAYING) {
+            mainShip.touchUp(touch, pointer);
+        } else {
+            buttonNewGame.touchUp(touch, pointer);
+        }
         return super.touchUp(touch, pointer);
     }
 
     private void startNewGame() {
         state = State.PLAYING;
-
         frags = 0;
-
         mainShip.startNewGame();
-
+        enemyEmitter.startNewGame();
         bulletPool.freeAllActiveObjects();
         enemyPool.freeAllActiveObjects();
         explosionPool.freeAllActiveObjects();
@@ -257,8 +286,8 @@ public class GameScreen extends Base2DScreen implements ActionListener {
 
     @Override
     public void actionPerformed(Object src) {
-        if (src == buttomNewGame) {
-            game.setScreen(new GameScreen(game));
+        if (src == buttonNewGame) {
+            startNewGame();
         }
     }
 
